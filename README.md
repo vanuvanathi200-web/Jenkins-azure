@@ -1,3 +1,4 @@
+
 1.install jenkins
 
 EXPERIMENT: INSTALL JENKINS ON UBUNTU
@@ -309,3 +310,229 @@ RESULT:
 Thus, the CI pipeline was successfully created and executed using Jenkins.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MAVEN PIPELINR
+
+## Ex. No: 1
+### CREATE MAVEN BUILD PIPELINE IN AZURE
+
+**Date:** __________
+
+### AIM:
+To build a Maven build pipeline in Azure.
+
+### PROCEDURE:
+
+**STEP 1: Create an account on Azure DevOps**
+
+1. Open the Azure DevOps website: https://dev.azure.com/
+2. Sign in using the GitHub account.
+3. Create a new organization.
+4. Create a new project named `DevOps` in Private mode.
+
+**STEP 2: Create a new Maven project using IntelliJ IDEA**
+
+1. Open IntelliJ IDEA.
+2. Click on **New Project**.
+3. Enter the project name as `sample`.
+4. Select the build system as **Maven** and language as **Java**.
+5. Select the available JDK and create the project.
+6. Create the Java program in `src/main/java/org/example/Main.java`.
+7. Open the terminal inside IntelliJ IDEA by pressing `Alt + F12`.
+
+**STEP 3: Install and configure Git**
+
+1. Check whether Git is installed using the command:
+
+   `git --version`
+
+2. Configure Git using the following commands:
+
+   `git config --global user.name "Your Name"`
+
+   `git config --global user.email "your-email@example.com"`
+
+3. Initialize the Git repository and commit the project files:
+
+   `git init`
+
+   `git add .`
+
+   `git commit -m "First Commit"`
+
+   `git branch -M main`
+
+**STEP 4: Create a GitHub repository**
+
+1. Open https://github.com/ and sign in.
+2. Create a new private repository named `maven-devops-lab`.
+3. Connect the local repository to GitHub using:
+
+   `git remote add origin https://github.com/YOUR-USERNAME/maven-devops-lab.git`
+
+4. Push the project files to GitHub using:
+
+   `git push -u origin main`
+
+**STEP 5: Create a Maven pipeline in Azure DevOps**
+
+1. Open the Azure DevOps website.
+2. Open the existing `DevOps` project.
+3. Select **Pipelines** from the left pane.
+4. Click **New pipeline**.
+5. Choose **GitHub** as the source.
+6. Select the `maven-devops-lab` repository.
+7. Grant the required permissions if prompted.
+8. Choose the **Maven** pipeline template.
+
+**STEP 6: Configure the Maven pipeline**
+
+1. Open the automatically generated `azure-pipelines.yml` file.
+2. Configure the pipeline to use the `main` branch.
+3. Select `ubuntu-latest` as the build agent.
+4. Configure the Maven task to use `pom.xml`.
+5. Set the JDK version to `11` and Maven goal to `package`.
+6. Save the YAML configuration.
+
+**STEP 7: Run the pipeline**
+
+1. Click **Save and run**.
+2. Enter the commit message if prompted.
+3. Click **Run** to execute the pipeline.
+4. Open the pipeline job and verify the execution status.
+5. Confirm that the pipeline status is **Succeeded**.
+
+### RESULT:
+
+Thus, a Maven build pipeline was successfully created and executed using Azure DevOps.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+RUN REGRESSION
+
+# Ex. No: 2
+
+## RUN REGRESSION TESTS USING MAVEN BUILD PIPELINE IN AZURE
+
+**Date:**
+
+### AIM:
+To run regression tests using the Maven build pipeline in Azure.
+
+### PROCEDURE:
+
+**STEP 1: Create a new Maven project in IntelliJ IDEA**
+
+1. Create a new project named `RegressionTesting`.
+2. Choose Maven as the build system and select an available JDK version.
+3. Create the project and wait until the project indexes are updated.
+
+**STEP 2: Add JUnit dependency and create a test class**
+
+1. Open the `pom.xml` file and add the following JUnit dependency:
+
+```xml
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.13.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
+2. Reload the Maven project to download the required dependencies.
+3. Create a test class named `MainTest` inside the `org.example` package under the test source directory.
+4. Add the following code to `MainTest.java`:
+
+```java
+package org.example;
+
+import org.junit.Test;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.assertEquals;
+
+public class MainTest {
+
+    @Test
+    public void testMainMethod() {
+        ByteArrayOutputStream outContent =
+                new ByteArrayOutputStream();
+
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        try {
+            Main.main(new String[]{});
+
+            assertEquals(
+                    "Hello and welcome!",
+                    outContent.toString().trim()
+            );
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+}
+```
+
+5. Run the `MainTest` class and verify that the test passes successfully.
+
+**STEP 3: Create a GitHub repository**
+
+1. Create a private GitHub repository named `RegressionTesting`.
+2. Initialize Git and add the project files to the repository.
+3. Commit the files and push the project to the `main` branch.
+4. Ensure that the `pom.xml`, source code and test class are available in the repository.
+
+**STEP 4: Create an Azure pipeline**
+
+1. Open the Azure DevOps website and select the existing `DevOps` project.
+2. Choose **Pipelines** from the left pane and click **New pipeline**.
+3. Select GitHub as the source and choose the `RegressionTesting` repository.
+4. Select the Maven pipeline template.
+5. Configure the pipeline using the following YAML code:
+
+```yaml
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '11'
+    jdkArchitectureOption: 'x64'
+    goals: 'clean test'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    testRunTitle: 'JUnit Test Results'
+```
+
+6. Save the pipeline configuration and run the pipeline on the `main` branch.
+7. Verify the build output and check the test results in Azure DevOps.
+8. Confirm that the pipeline completes successfully and the regression test passes.
+
+### RESULT:
+
+Thus, regression tests have been run successfully using the Maven build pipeline in Azure.
+
+### OUTPUT:
+
+Paste the screenshots of the following results in the record:
+
+- Fig. 2.1 – Creating the `RegressionTesting` Maven project.
+- Fig. 2.2 – Adding the JUnit dependency in `pom.xml`.
+- Fig. 2.3 – Creating the `MainTest` class.
+- Fig. 2.4 – Running the `MainTest` class.
+- Fig. 2.5 – Successful local JUnit test results.
+- Fig. 2.6 – Configuring the Maven pipeline in Azure DevOps.
+- Fig. 2.7 – Successful Azure pipeline run showing the green tick.
+- Fig. 2.8 – Azure pipeline test results showing the test passed.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
